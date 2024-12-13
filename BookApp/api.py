@@ -24,8 +24,8 @@ def BookCreateApi(request):
 
     data = request.data
 
-    name = data.name
-    author = data.author
+    name = data['name']
+    author = data['author']
 
     BookModel(name = name, author = author).save()
 
