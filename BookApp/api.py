@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from .models import BookModel
+from rest_framework import serializers
+
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])  # Force JSON response
 def BookListApi(request):
@@ -26,8 +28,14 @@ def BookCreateApi(request):
 
     name = data['name']
     author = data['author']
+    price =  data['price']
+    
+    if price < 0 :
+        return Response ({
+            'message':'Price cannot be negative'
+        })
 
-    BookModel(name = name, author = author).save()
+    BookModel(name = name, author = author , price = price ).save()
 
     return Response({
         'message': 'Book Created'
@@ -49,3 +57,13 @@ def BookUpdateApi(request,id):
     return Response({
         'message': 'Book Updapted'
     })    
+    
+@api_view(['DELETE']) 
+def BookDeleteApi(request):
+       
+    book = BookModel.objects.get( id = id)
+    book.delete()
+    
+    return Response({
+        'message':'Book Deleted'
+    })
