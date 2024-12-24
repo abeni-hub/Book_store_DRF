@@ -32,3 +32,20 @@ def BookCreateApi(request):
     return Response({
         'message': 'Book Created'
     })
+    
+   
+@api_view(['PPUT'])
+def BookUpdateApi(request,id):
+    data = request.data    
+    
+    book = BookModel.objects.get(id = id)
+    
+    book.name = data['data']
+    book.author = data['author']
+
+
+    book.save()
+    
+    return Response({
+        'message': 'Book Updapted'
+    })    
